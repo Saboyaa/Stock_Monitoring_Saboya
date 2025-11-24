@@ -1,1 +1,8 @@
 HG_API_KEY=SUA_CHAVE_HG_AQUI
+MAIL_FROM=seu@dominio.com
+MAIL_TO=destino@dominio.com
+SMTP_HOST=smtp.exemplo.com
+SMTP_PORT=587
+SMTP_USER=usuario
+SMTP_PASS=senha
+SMTP_SSL=true
