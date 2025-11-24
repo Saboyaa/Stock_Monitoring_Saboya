@@ -1,6 +1,6 @@
 # Monitor de Ações
 
-Monitor de Ações é uma aplicação console .NET projetada para rastrear os preços de ações brasileiras e acionar alertas com base em limites mínimos e máximos de preço definidos pelo usuário. Ela utiliza múltiplas APIs de dados financeiros para alta disponibilidade, com um mecanismo de fallback integrado.
+Monitor de Ações é uma aplicação de console .NET que acompanha os preços de ações brasileiras e dispara alertas quando atingem limites mínimos ou máximos definidos pelo usuário. O sistema utiliza múltiplas APIs de mercado para garantir alta disponibilidade, com fallback automático entre os provedores de dados.
 
 ## Funcionalidades
 
@@ -10,6 +10,16 @@ Monitor de Ações é uma aplicação console .NET projetada para rastrear os pr
 *   **Notificações no Console**: Receba alertas imediatos no console quando um limite de preço for ultrapassado.
 *   **Notificações por Email**: Receba alertas imediatos por email quando um limite de preço for ultrapassado.
 *   **Verificações de Integridade da API**: Inclui um utilitário de teste para verificar o status e a resposta das APIs integradas.
+## Desenvolvimento
+Usei a base do SOLID para escrever um código que seja estável e consiga ser modificado no futuro de forma mais fácil  
+
+| Princípio                     | Como o código segue                                                                                                                                                          |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **S** - Single Responsibility | Cada classe tem uma única responsabilidade: `PriceAlertService` verifica preços, `EmailNotifier` envia emails, `BrapiPriceProvider` busca preços da API Brapi, etc.          |
+| **O** - Open/Closed           | As classes são abertas para extensão, mas fechadas para modificação. Por exemplo, é fácil adicionar outro `IPriceProvider` ou `INotifier` sem alterar as classes existentes. |
+| **L** - Liskov Substitution   | Interfaces (`IPriceProvider`, `INotifier`, `IApiHealthCheck`) permitem substituir implementações concretas sem quebrar o código.                                             |
+| **I** - Interface Segregation | As interfaces são pequenas e específicas: `IPriceProvider` só tem `GetPriceAsync`, `INotifier` só tem `Notify`, evitando métodos desnecessários.                             |
+| **D** - Dependency Inversion  | As classes dependem de abstrações (`IPriceProvider`, `INotifier`) em vez de implementações concretas. O `Program.cs` injeta dependências via DI container.                   |
 
 ## Começando
 
@@ -40,8 +50,8 @@ Siga estas instruções para obter uma cópia do projeto e executá-lo em sua m�
 
 ### Uso
 
-Execute a aplicação a partir do seu terminal, fornecendo o ticker da ação, o preço mínimo e o preço máximo como argumentos.
-
+Execute a aplicação a partir do seu terminal, fornecendo o ticker da ação, o preço mínimo e o preço máximo como argumentos.  
+obs: Os preços foram baseados no brasil então use a formatação de numeros brasileira. ex: 12.345,67  
 **Formato do comando:**
 ```sh
 dotnet run --project StockMonitor/StockMonitor.csproj <TICKER> <PREÇO_MÍNIMO> <PREÇO_MÁXIMO>
@@ -234,3 +244,9 @@ classDiagram
     TestRunner --> IApiHealthCheck
 
 ```
+## Possíveis melhorias futuras
+
+* **APIs mais atualizadas**: Atualmente usamos Brapi e HgBrasil, que retornam preços do dia ou valores históricos. No futuro, podemos integrar APIs que forneçam **cotações em tempo real** ou com **menor latência**, garantindo alertas mais precisos.
+* **Monitoramento contínuo aprimorado**: Adicionar agendamento configurável, logs históricos e alertas repetidos, permitindo acompanhar a evolução do preço ao longo do tempo.
+* **Mais canais de notificação**: Além de e-mail e console, incluir **SMS, Telegram ou WhatsApp** para alertas mais imediatos.
+* **Validação e segurança**: Tratar melhor entradas inválidas (preços negativos, tickers incorretos) e proteger credenciais de SMTP, usando **cofres de segredo** ou **variáveis de ambiente criptografadas**.
