@@ -13,8 +13,8 @@ public class AlertServiceTests
 
         var service = new PriceAlertService(fakeProvider, new[] { fakeNotifier });
 
-        var minRule = new AlertRule("TESTE", 10, isMinRule: true);
-        var maxRule = new AlertRule("TESTE", 100, isMinRule: false);
+        var minRule = new IAlertRule("TESTE", 10, isMinRule: true);
+        var maxRule = new IAlertRule("TESTE", 100, isMinRule: false);
 
         await service.CheckAsync(minRule, maxRule);
 

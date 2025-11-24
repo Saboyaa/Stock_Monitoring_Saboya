@@ -14,7 +14,7 @@ public class PriceAlertService
         _notifiers = notifiers;
     }
 
-    public async Task CheckAsync(AlertRule minRule, AlertRule maxRule)
+    public async Task CheckAsync(IAlertRule minRule, IAlertRule maxRule)
     {
         var price = await _provider.GetPriceAsync(minRule.Ticker);
 

@@ -22,12 +22,29 @@ services.AddSingleton<IPriceProvider>(sp =>
 });
 
 // Notifiers (registrar múltiplos INotifier)
-services.AddSingleton<INotifier, ConsoleNotifier>();
+var emailConfig = new EmailConfig
+{
+    From = Env.GetString("MAIL_FROM") ?? "noreply@example.com",
+    To = Env.GetString("MAIL_TO") ?? "noreply@example.com",
+    SmtpHost = Env.GetString("SMTP_HOST") ?? "localhost",
+    SmtpPort = int.TryParse(Env.GetString("SMTP_PORT"), out var port) ? port : 25,
+    SmtpUser = Env.GetString("SMTP_USER"),
+    SmtpPass = Env.GetString("SMTP_PASS"),
+    EnableSsl = bool.TryParse(Env.GetString("SMTP_SSL"), out var ssl) && ssl
+};
+
+services.AddSingleton(emailConfig);
+services.AddSingleton<IEmailClient, SmtpEmailClient>();
 services.AddSingleton<INotifier, EmailNotifier>();
+
 
 // Alert service
 services.AddSingleton<PriceAlertService>();
 
+// Testes
+services.AddSingleton<IApiHealthCheck, BrapiHealthCheck>();
+services.AddSingleton<IApiHealthCheck, HgBrasilHealthCheck>();
+services.AddSingleton<TestRunner>();
 
 var provider = services.BuildServiceProvider();
 
@@ -56,7 +73,7 @@ decimal max = decimal.Parse(args[2]);
 
 var alertService = provider.GetRequiredService<PriceAlertService>();
 
-var minRule = new AlertRule(ticker, min, isMinRule: true);
-var maxRule = new AlertRule(ticker, max, isMinRule: false);
+var minRule = new IAlertRule(ticker, min, isMinRule: true);
+var maxRule = new IAlertRule(ticker, max, isMinRule: false);
 
 await alertService.CheckAsync(minRule, maxRule);
