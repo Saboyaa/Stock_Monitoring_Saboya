@@ -76,4 +76,8 @@ var alertService = provider.GetRequiredService<PriceAlertService>();
 var minRule = new IAlertRule(ticker, min, isMinRule: true);
 var maxRule = new IAlertRule(ticker, max, isMinRule: false);
 
-await alertService.CheckAsync(minRule, maxRule);
+while(true)
+{
+    await alertService.CheckAsync(minRule, maxRule);
+    await Task.Delay(5000); // espera 5 segundos antes de checar novamente
+}
