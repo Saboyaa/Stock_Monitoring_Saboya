@@ -36,7 +36,7 @@ var emailConfig = new EmailConfig
 services.AddSingleton(emailConfig);
 services.AddSingleton<IEmailClient, SmtpEmailClient>();
 services.AddSingleton<INotifier, EmailNotifier>();
-
+services.AddSingleton<INotifier, ConsoleNotifier>();
 
 // Alert service
 services.AddSingleton<PriceAlertService>();
