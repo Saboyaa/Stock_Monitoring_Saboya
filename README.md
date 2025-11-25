@@ -43,10 +43,7 @@ Siga estas instruções para obter uma cópia do projeto e executá-lo em sua m�
     cp .envexample .env
     ```
 
-3.  Abra o arquivo `.env` e substitua `SUA_CHAVE_HG_AQUI` pela sua chave de API do HG Brasil:
-    ```
-    HG_API_KEY=SUA_CHAVE_HG_AQUI
-    ```
+3.  Abra o arquivo `.env` e coloque suas chaves de API e configurações SMTP
 
 ### Uso
 
