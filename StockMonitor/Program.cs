@@ -55,7 +55,6 @@ if (args.Length == 1 && args[0] == "--test")
         new BrapiHealthCheck(),
         new HgBrasilHealthCheck(),
     };
-
     var runner = new TestRunner(tests);
     await runner.RunAllAsync();
     return;

@@ -9,8 +9,15 @@ public class BrapiHealthCheck : IApiHealthCheck
 
     public async Task RunAsync()
     {
-        var provider = new BrapiPriceProvider();
-        var price = await provider.GetPriceAsync("PETR4");
-        Console.WriteLine($"✅ {Name}: sucesso! Preço: {price}");
+        try
+        {
+            var provider = new BrapiPriceProvider();
+            var price = await provider.GetPriceAsync("PETR4");
+            Console.WriteLine($"✅ {Name}: sucesso! Preço: {price}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ {Name}: falhou. \nErro: {ex.Message}");
+        }
     }
 }

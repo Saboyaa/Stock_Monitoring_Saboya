@@ -18,11 +18,20 @@ public class PriceAlertService
     {
         var price = await _provider.GetPriceAsync(minRule.Ticker);
 
-        if (price <= minRule.Price)
+        if ((price <= minRule.Price) && !minRule.AlreadyOnRule)
+        {
+            minRule.AlreadyOnRule = true;
             NotifyAll($"{minRule.Ticker} caiu abaixo de {minRule.Price}. Preço atual: {price}");
-
-        if (price >= maxRule.Price)
+        }else if(price > minRule.Price){
+            minRule.AlreadyOnRule = false;
+        }
+        if (price >= maxRule.Price && !maxRule.AlreadyOnRule)
+        {
+            maxRule.AlreadyOnRule = true;
             NotifyAll($"{maxRule.Ticker} subiu acima de {maxRule.Price}. Preço atual: {price}");
+        }else if(price < maxRule.Price){
+            maxRule.AlreadyOnRule = false;
+        }
     }
 
     private void NotifyAll(string message)

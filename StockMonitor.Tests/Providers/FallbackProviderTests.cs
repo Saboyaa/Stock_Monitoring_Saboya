@@ -21,9 +21,7 @@ public class FallbackProviderTests
     {
         var p1 = new FailingProvider();
         var p2 = new FailingProvider();
-
         var fallback = new ProviderFallbackService(p1, p2);
-
         await Assert.ThrowsAsync<Exception>(() =>
             fallback.GetPriceAsync("T")
         );

@@ -19,17 +19,16 @@ public class SmtpEmailClient : IEmailClient
             EnableSsl = _config.EnableSsl,
             Timeout = 10000
         };
-
         if (!string.IsNullOrWhiteSpace(_config.SmtpUser))
+        {
             client.Credentials = new NetworkCredential(_config.SmtpUser, _config.SmtpPass);
-
+        }
         var mail = new MailMessage(from, to)
         {
             Subject = subject,
             Body = body,
             IsBodyHtml = false
         };
-
         client.Send(mail);
     }
 }
